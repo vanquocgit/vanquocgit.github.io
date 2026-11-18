@@ -1,0 +1,108 @@
+---
+import { profile } from '@/data/profile';
+
+export interface Props {
+  type: 'Person' | 'BlogPosting' | 'WebApplication';
+  title?: string;
+  description?: string;
+  pubDate?: Date;
+  updatedDate?: Date;
+  image?: string;
+  youtubeId?: string;
+  breadcrumbs?: { name: string; item: string }[];
+}
+
+const {
+  type,
+  title = profile.siteTitle,
+  description = profile.bio,
+  pubDate,
+  updatedDate,
+  image,
+  youtubeId,
+  breadcrumbs,
+} = Astro.props;
+
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://username.github.io';
+const currentUrl = new URL(Astro.url.pathname, siteOrigin).toString();
+
+const schemas: Record<string, unknown>[] = [];
+
+if (type === 'Person') {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: profile.author,
+    jobTitle: profile.role,
+    description: profile.bio,
+    url: siteOrigin,
+    sameAs: profile.socials
+      .map((s) => s.href)
+      .filter((href) => href.startsWith('http')),
+  });
+}
+
+if (type === 'BlogPosting') {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url: currentUrl,
+    datePublished: pubDate?.toISOString(),
+    dateModified: (updatedDate ?? pubDate)?.toISOString(),
+    image: image ? new URL(image, siteOrigin).toString() : undefined,
+    author: {
+      '@type': 'Person',
+      name: profile.author,
+      url: siteOrigin,
+    },
+    inLanguage: 'vi',
+  });
+
+  if (youtubeId) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'VideoObject',
+      name: title,
+      description,
+      thumbnailUrl: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+      uploadDate: pubDate?.toISOString(),
+      embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}`,
+    });
+  }
+}
+
+if (type === 'WebApplication') {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: title,
+    description,
+    url: currentUrl,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'All',
+    author: {
+      '@type': 'Person',
+      name: profile.author,
+    },
+  });
+}
+
+if (breadcrumbs && breadcrumbs.length > 0) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: new URL(crumb.item, siteOrigin).toString(),
+    })),
+  });
+}
+---
+
+{schemas.map((schema) => (
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+))}

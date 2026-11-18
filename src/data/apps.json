@@ -1,0 +1,24 @@
+[
+  {
+    "id": "word-counter-slug",
+    "name": "Đếm Từ & Tạo Slug SEO Tiếng Việt",
+    "description": "Công cụ nhỏ chạy ngay trên trình duyệt để đếm ký tự, từ, ước tính thời gian đọc và chuyển tiêu đề tiếng Việt có dấu thành slug URL chuẩn SEO.",
+    "url": "/tools/word-counter",
+    "repoUrl": "https://github.com/username/website-gitpages",
+    "locationType": "internal",
+    "status": "Live",
+    "tags": ["Astro", "Vanilla JS", "SEO"],
+    "featured": true
+  },
+  {
+    "id": "json-formatter-demo",
+    "name": "JSON Formatter & Diff (Mẫu Multi-Repo)",
+    "description": "Ví dụ liên kết tới một Web App đặt ở repository GitHub riêng biệt và gắn chung tên miền ở đường dẫn /tool-json/.",
+    "url": "/tool-json/",
+    "repoUrl": "https://github.com/username/tool-json",
+    "locationType": "subpath-repo",
+    "status": "Mẫu thiết kế",
+    "tags": ["React", "TypeScript", "Vite"],
+    "featured": true
+  }
+]

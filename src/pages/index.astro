@@ -1,0 +1,103 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import AppCard from '@/components/AppCard.astro';
+import JsonLd from '@/components/seo/JsonLd.astro';
+import { profile } from '@/data/profile';
+import apps from '@/data/apps.json';
+import { getCollection } from 'astro:content';
+import { sortPostsByDate } from '@/utils/posts';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const latestPosts = sortPostsByDate(allPosts).slice(0, 4);
+const featuredApps = apps.filter((app) => app.featured).slice(0, 4);
+---
+
+<BaseLayout title={profile.siteTitle} description={profile.bio}>
+  <JsonLd slot="head" type="Person" />
+
+  <!-- Hero Section -->
+  <section class="rounded-3xl border border-line bg-surface p-7 sm:p-10">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <div class="max-w-2xl">
+        <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-paper px-3.5 py-1 text-xs font-medium text-muted">
+          <span class="h-2 w-2 rounded-full bg-ink" aria-hidden="true"></span>
+          <span>{profile.role} • {profile.location}</span>
+        </div>
+
+        <h1 class="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+          Xin chào, tôi là {profile.author}
+        </h1>
+
+        <p class="mt-4 text-base leading-relaxed text-charcoal sm:text-lg">
+          {profile.bio}
+        </p>
+
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <a href="/cv" class="btn-primary">
+            Xem CV của tôi
+          </a>
+          <a href="/posts" class="btn-secondary">
+            Đọc Vlog & Bài viết
+          </a>
+          <a href="/apps" class="btn-secondary">
+            Công cụ & App
+          </a>
+        </div>
+      </div>
+
+      <!-- Avatar Monogram -->
+      <div class="hidden shrink-0 sm:flex">
+        <div class="flex h-28 w-28 items-center justify-center rounded-full border border-line bg-subtle text-3xl font-bold tracking-tight text-ink">
+          {profile.initials}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Vlog & Blog Posts -->
+  <section class="mt-14">
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-ink">Vlog & Bài viết mới nhất</h2>
+        <p class="mt-1 text-sm text-muted">Ghi chép kiến thức, hướng dẫn kỹ thuật và nhật ký học tập.</p>
+      </div>
+      <a
+        href="/posts"
+        class="shrink-0 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:border-line-strong hover:bg-subtle"
+      >
+        Xem tất cả →
+      </a>
+    </div>
+
+    {latestPosts.length > 0 ? (
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {latestPosts.map((post) => <PostCard post={post} />)}
+      </div>
+    ) : (
+      <div class="card-flat p-8 text-center text-sm text-muted">
+        Chưa có bài viết nào được xuất bản. Chạy <code>npm run new-post "Tiêu đề"</code> để bắt đầu.
+      </div>
+    )}
+  </section>
+
+  <!-- Featured Apps & Tools -->
+  <section class="mt-14">
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight text-ink">Công cụ & Web App</h2>
+        <p class="mt-1 text-sm text-muted">Các tiện ích nhỏ và dự án web chạy trực tiếp trên GitHub Pages.</p>
+      </div>
+      <a
+        href="/apps"
+        class="shrink-0 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-ink transition-colors hover:border-line-strong hover:bg-subtle"
+      >
+        Tất cả công cụ →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+      {featuredApps.map((app) => <AppCard app={app} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,63 @@
+---
+import BaseHead from '@/components/seo/BaseHead.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import '@/styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+  wide?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+  wide = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishedTime={publishedTime}
+      modifiedTime={modifiedTime}
+    />
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col bg-paper font-sans text-charcoal">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
+    >
+      Chuyển đến nội dung chính
+    </a>
+
+    <Header />
+
+    <main
+      id="main-content"
+      class:list={[
+        'mx-auto w-full flex-1 px-5 py-8 sm:px-6 sm:py-12',
+        wide ? 'max-w-5xl' : 'max-w-4xl',
+      ]}
+    >
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

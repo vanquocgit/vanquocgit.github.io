@@ -1,0 +1,147 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import JsonLd from '@/components/seo/JsonLd.astro';
+import { loadCvData } from '@/utils/cv';
+
+const cv = loadCvData();
+---
+
+<BaseLayout title={`CV — ${cv.name}`} description={`Hồ sơ năng lực (CV) của ${cv.name} — ${cv.role}.`}>
+  <JsonLd
+    slot="head"
+    type="Person"
+    breadcrumbs={[
+      { name: 'Trang chủ', item: '/' },
+      { name: 'CV', item: '/cv' },
+    ]}
+  />
+
+  <!-- Thanh thao tác trên web (ẩn khi in PDF) -->
+  <div class="print:hidden mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface px-5 py-3.5">
+    <p class="text-sm text-muted">
+      Dữ liệu CV được quản lý tập trung tại <code class="rounded-md bg-subtle px-1.5 py-0.5 font-mono text-xs text-ink">src/data/cv.yaml</code>.
+    </p>
+    <button type="button" id="print-cv-btn" class="btn-primary py-2 text-xs">
+      In / Lưu thành PDF
+    </button>
+  </div>
+
+  <!-- Khung CV chuẩn A4 -->
+  <div class="cv-card rounded-3xl border border-line bg-surface p-7 sm:p-10">
+    <!-- Header CV -->
+    <header class="border-b border-line pb-6">
+      <h1 class="text-3xl font-bold tracking-tight text-ink">{cv.name}</h1>
+      <p class="mt-1 text-lg font-medium text-charcoal">{cv.role}</p>
+
+      <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+        <span>{cv.location}</span>
+        <a href={`mailto:${cv.email}`} class="underline decoration-line-strong underline-offset-4 hover:text-ink">
+          {cv.email}
+        </a>
+        <a href={cv.github} target="_blank" rel="noopener noreferrer" class="underline decoration-line-strong underline-offset-4 hover:text-ink">
+          GitHub
+        </a>
+        <a href={cv.linkedin} target="_blank" rel="noopener noreferrer" class="underline decoration-line-strong underline-offset-4 hover:text-ink">
+          LinkedIn
+        </a>
+      </div>
+    </header>
+
+    <!-- Tóm tắt -->
+    <section class="cv-section mt-6 border-b border-line pb-6">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Giới thiệu</h2>
+      <p class="mt-2.5 text-sm leading-relaxed text-charcoal sm:text-base">{cv.summary}</p>
+    </section>
+
+    <!-- Kinh nghiệm làm việc -->
+    <section class="mt-6 border-b border-line pb-6">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Kinh nghiệm làm việc</h2>
+      <div class="mt-4 space-y-6">
+        {cv.experience.map((exp) => (
+          <article class="cv-section">
+            <div class="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline">
+              <div>
+                <h3 class="text-base font-semibold text-ink">{exp.role}</h3>
+                <p class="text-sm font-medium text-charcoal">{exp.company}</p>
+              </div>
+              <div class="text-xs text-muted sm:text-right">
+                <p class="font-medium text-charcoal">{exp.period}</p>
+                {exp.location && <p>{exp.location}</p>}
+              </div>
+            </div>
+            <ul class="mt-2.5 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-charcoal">
+              {exp.highlights.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Dự án tiêu biểu -->
+    <section class="mt-6 border-b border-line pb-6">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Dự án tiêu biểu</h2>
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {cv.projects.map((proj) => (
+          <article class="cv-section rounded-2xl border border-line bg-paper p-4">
+            <h3 class="text-sm font-semibold text-ink">
+              <a href={proj.url} class="underline decoration-line-strong underline-offset-4 hover:decoration-ink">
+                {proj.name}
+              </a>
+            </h3>
+            <p class="mt-1.5 text-xs leading-relaxed text-muted">{proj.description}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- Kỹ năng -->
+    <section class="cv-section mt-6 border-b border-line pb-6">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Kỹ năng</h2>
+      <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {cv.skills.map((group) => (
+          <div>
+            <h3 class="text-sm font-semibold text-ink">{group.group}</h3>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              {group.items.map((skill) => (
+                <span class="pill-tag text-xs">{skill}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Học vấn & Ngôn ngữ -->
+    <div class="cv-section mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <section>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Học vấn</h2>
+        <div class="mt-3 space-y-3">
+          {cv.education.map((edu) => (
+            <div>
+              <h3 class="text-sm font-semibold text-ink">{edu.school}</h3>
+              <p class="text-sm text-charcoal">{edu.degree}</p>
+              <p class="text-xs text-muted">{edu.period}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-muted">Ngôn ngữ</h2>
+        <ul class="mt-3 list-disc space-y-1.5 pl-5 text-sm text-charcoal">
+          {cv.languages.map((lang) => (
+            <li>{lang}</li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  document.getElementById('print-cv-btn')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>

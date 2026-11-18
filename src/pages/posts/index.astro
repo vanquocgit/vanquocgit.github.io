@@ -1,0 +1,122 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { sortPostsByDate } from '@/utils/posts';
+
+const allPosts = sortPostsByDate(await getCollection('posts', ({ data }) => !data.draft));
+const allTags = Array.from(new Set(allPosts.flatMap((post) => post.data.tags))).sort();
+---
+
+<BaseLayout
+  title="Vlog & Bài viết"
+  description="Nơi lưu trữ và chia sẻ kiến thức học tập, ghi chú kỹ thuật và các tập vlog cá nhân."
+>
+  <header class="mb-8 rounded-3xl border border-line bg-surface p-6 sm:p-8">
+    <h1 class="text-3xl font-bold tracking-tight text-ink">Vlog & Bài viết</h1>
+    <p class="mt-2 text-sm text-muted sm:text-base">
+      Tổng hợp {allPosts.length} bài chia sẻ kiến thức, ghi chú thực hành và vlog.
+    </p>
+
+    <!-- Tìm kiếm & Lọc nhanh -->
+    <div class="mt-5 space-y-4">
+      <input
+        id="post-search"
+        type="search"
+        placeholder="Tìm nhanh theo tiêu đề, mô tả hoặc từ khóa..."
+        class="w-full rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink placeholder:text-muted-light focus:border-ink focus:outline-none"
+      />
+
+      <div class="flex flex-wrap gap-2" id="tag-filters">
+        <button
+          type="button"
+          data-tag="all"
+          class="tag-filter-btn rounded-full bg-ink px-3.5 py-1 text-xs font-medium text-paper transition-colors"
+        >
+          Tất cả
+        </button>
+        {allTags.map((tag) => (
+          <button
+            type="button"
+            data-tag={tag}
+            class="tag-filter-btn rounded-full border border-line bg-paper px-3.5 py-1 text-xs font-medium text-charcoal transition-colors hover:bg-subtle"
+          >
+            #{tag}
+          </button>
+        ))}
+      </div>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-2" id="posts-grid">
+    {allPosts.map((post) => (
+      <div
+        class="post-item"
+        data-title={post.data.title.toLowerCase()}
+        data-desc={post.data.description.toLowerCase()}
+        data-tags={post.data.tags.join(',').toLowerCase()}
+      >
+        <PostCard post={post} />
+      </div>
+    ))}
+  </div>
+
+  <p id="no-posts-msg" class="mt-8 hidden rounded-2xl border border-line bg-surface p-8 text-center text-sm text-muted">
+    Không tìm thấy bài viết nào phù hợp với từ khóa bạn đang tìm.
+  </p>
+</BaseLayout>
+
+<script>
+  const searchInput = document.getElementById('post-search') as HTMLInputElement | null;
+  const tagButtons = document.querySelectorAll('.tag-filter-btn');
+  const postItems = document.querySelectorAll('.post-item');
+  const emptyMsg = document.getElementById('no-posts-msg');
+
+  let activeTag = new URLSearchParams(window.location.search).get('tag')?.toLowerCase() || 'all';
+
+  function updateFilterUI() {
+    tagButtons.forEach((btn) => {
+      const btnTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
+      const isSelected = btnTag === activeTag;
+      btn.classList.toggle('bg-ink', isSelected);
+      btn.classList.toggle('text-paper', isSelected);
+      btn.classList.toggle('border', !isSelected);
+      btn.classList.toggle('border-line', !isSelected);
+      btn.classList.toggle('bg-paper', !isSelected);
+      btn.classList.toggle('text-charcoal', !isSelected);
+    });
+  }
+
+  function applyFilter() {
+    const query = (searchInput?.value || '').trim().toLowerCase();
+    let visibleCount = 0;
+
+    postItems.forEach((item) => {
+      const title = item.getAttribute('data-title') || '';
+      const desc = item.getAttribute('data-desc') || '';
+      const tags = (item.getAttribute('data-tags') || '').split(',').filter(Boolean);
+
+      const matchesTag = activeTag === 'all' || tags.includes(activeTag);
+      const matchesQuery = !query || title.includes(query) || desc.includes(query) || tags.some((t) => t.includes(query));
+
+      const show = matchesTag && matchesQuery;
+      item.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    });
+
+    emptyMsg?.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  tagButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeTag = (btn.getAttribute('data-tag') || 'all').toLowerCase();
+      updateFilterUI();
+      applyFilter();
+    });
+  });
+
+  searchInput?.addEventListener('input', applyFilter);
+
+  updateFilterUI();
+  applyFilter();
+</script>

@@ -1,0 +1,65 @@
+---
+import { profile } from '@/data/profile';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  modifiedTime?: string;
+}
+
+const {
+  title = profile.siteTitle,
+  description = profile.bio,
+  image = '/favicon.svg',
+  type = 'website',
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const siteOrigin = Astro.site ?? new URL('https://username.github.io');
+const canonicalURL = new URL(Astro.url.pathname, siteOrigin);
+const socialImageURL = new URL(image, siteOrigin);
+const pageTitle = title === profile.siteTitle ? title : `${title} | ${profile.author}`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href={canonicalURL.toString()} />
+<link rel="alternate" type="application/rss+xml" title={profile.siteTitle} href={new URL('/rss.xml', siteOrigin)} />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Primary Meta Tags -->
+<title>{pageTitle}</title>
+<meta name="title" content={pageTitle} />
+<meta name="description" content={description} />
+<meta name="author" content={profile.author} />
+<meta name="theme-color" content="#F8F7F4" />
+
+<!-- Open Graph / Facebook / Zalo -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL.toString()} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={socialImageURL.toString()} />
+<meta property="og:locale" content="vi_VN" />
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+{modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL.toString()} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImageURL.toString()} />
+
+<!-- Vietnamese-ready Google Fonts (non-blocking) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>

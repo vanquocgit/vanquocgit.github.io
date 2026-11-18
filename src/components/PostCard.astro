@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { estimateReadingTime, formatDateVi } from '@/utils/posts';
+
+export interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const readingTime = estimateReadingTime(post.body);
+const isVlog = Boolean(post.data.youtubeId && post.data.youtubeId.trim().length > 0);
+---
+
+<article class="card-flat group flex flex-col justify-between p-5 hover:border-line-strong hover:bg-subtle/40 sm:p-6">
+  <div>
+    <div class="mb-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+      <time datetime={post.data.pubDate.toISOString()}>
+        {formatDateVi(post.data.pubDate)}
+      </time>
+      <span aria-hidden="true">•</span>
+      <span>{readingTime} phút đọc</span>
+      {isVlog && (
+        <span class="rounded-full bg-ink px-2.5 py-0.5 text-[11px] font-medium text-paper">
+          Vlog
+        </span>
+      )}
+    </div>
+
+    <h3 class="text-lg font-semibold leading-snug text-ink">
+      <a href={`/posts/${post.slug}/`} class="after:content-[''] group-hover:underline group-hover:decoration-line-strong group-hover:underline-offset-4">
+        {post.data.title}
+      </a>
+    </h3>
+
+    <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">
+      {post.data.description}
+    </p>
+  </div>
+
+  {post.data.tags.length > 0 && (
+    <div class="mt-4 flex flex-wrap gap-1.5">
+      {post.data.tags.map((tag) => (
+        <span class="pill-tag text-[11px]">#{tag}</span>
+      ))}
+    </div>
+  )}
+</article>

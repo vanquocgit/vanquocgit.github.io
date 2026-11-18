@@ -1,0 +1,41 @@
+---
+title: "Cách tôi tổ chức Website cá nhân bằng Astro trên GitHub Pages"
+description: "Ghi chép kiến trúc website cá nhân tối ưu tốc độ, chuẩn SEO, lưu trữ CV, Vlog và kết nối nhiều công cụ web ở các repo khác nhau."
+pubDate: 2026-11-17
+updatedDate: 2026-11-17
+tags: ["astro", "github-pages", "seo"]
+youtubeId: ""
+draft: false
+---
+import Callout from '@/components/mdx/Callout.astro';
+
+## 1. Tại sao lại chọn Web tĩnh (SSG) thay vì SPA thuần?
+
+Khi làm trang chia sẻ kiến thức cá nhân, hai yếu tố quan trọng nhất là **tốc độ mở trang tức thì** và **Google đọc được toàn bộ nội dung ngay lập tức**.
+
+Với Astro, mọi file `.mdx` được biên dịch sẵn thành HTML thuần trong bước build. Trình duyệt không phải tải cả trăm kilobyte JavaScript chỉ để hiển thị một bài viết.
+
+<Callout type="tip" title="Mẹo viết bài nhanh">
+  Bạn chỉ cần chạy lệnh <code>npm run new-post "Tiêu đề bài mới"</code> trong terminal để sinh sẵn thư mục và khung mẫu bài viết.
+</Callout>
+
+## 2. Minh họa khối Code có nút sao chép
+
+Khi viết các bài chia sẻ kỹ thuật, bạn có thể chèn code nhiều ngôn ngữ với cú pháp Markdown chuẩn:
+
+```ts title="slugify.ts"
+export function toSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+```
+
+## 3. Tách công cụ thành nhiều Repository độc lập
+
+Thay vì nhét toàn bộ code của mọi web app vào một chỗ, mỗi công cụ mới có thể đặt ở repo riêng. Chỉ cần cấu hình `base: '/ten-repo/'` khi build và thêm một mục vào `src/data/apps.json` là trang `/apps` tự động cập nhật.

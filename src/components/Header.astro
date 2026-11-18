@@ -1,0 +1,49 @@
+---
+import { profile } from '@/data/profile';
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/';
+  return currentPath.startsWith(href);
+}
+---
+
+<header
+  class="print:hidden fixed bottom-4 left-1/2 z-40 w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-full border border-line-strong bg-surface/95 px-2 py-1.5 backdrop-blur-md lg:sticky lg:bottom-auto lg:left-auto lg:top-0 lg:w-full lg:max-w-none lg:translate-x-0 lg:rounded-none lg:border-0 lg:border-b lg:border-line lg:bg-paper/90 lg:px-0 lg:py-0"
+>
+  <div class="mx-auto flex items-center justify-center lg:max-w-4xl lg:justify-between lg:px-6 lg:py-3.5">
+    <!-- Brand: Hiển thị trên Desktop (>= 1024px) -->
+    <a
+      href="/"
+      class="group hidden items-center gap-2.5 rounded-full pr-2 text-ink transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink lg:flex"
+    >
+      <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-xs font-bold tracking-tight text-paper">
+        {profile.initials}
+      </span>
+      <span class="text-base font-semibold tracking-tight">{profile.author}</span>
+    </a>
+
+    <!-- Navigation: Viên thuốc nổi dưới đáy ở Tablet/Mobile, thanh ngang ở Desktop -->
+    <nav aria-label="Điều hướng chính" class="flex items-center gap-1 overflow-x-auto">
+      {profile.nav.map((item) => {
+        const active = isActive(item.href);
+        return (
+          <a
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+            class:list={[
+              'whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-4 sm:py-2 sm:text-sm lg:px-3.5 lg:py-1.5',
+              active
+                ? 'bg-ink text-paper'
+                : 'text-charcoal hover:bg-subtle hover:text-ink',
+            ]}
+          >
+            <span class="lg:hidden">{item.shortLabel ?? item.label}</span>
+            <span class="hidden lg:inline">{item.label}</span>
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+</header>

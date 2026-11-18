@@ -1,0 +1,28 @@
+---
+import { profile } from '@/data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="print:hidden mt-16 border-t border-line bg-paper">
+  <div class="mx-auto flex max-w-4xl flex-col gap-4 px-5 pt-8 pb-24 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:pb-8">
+    <p>
+      © {year} <span class="font-medium text-ink">{profile.author}</span>. Xây dựng trên GitHub Pages.
+    </p>
+    <div class="flex flex-wrap items-center gap-4">
+      {profile.socials.map((item) => (
+        <a
+          href={item.href}
+          target={item.href.startsWith('http') ? '_blank' : undefined}
+          rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          class="transition-colors hover:text-ink"
+        >
+          {item.label}
+        </a>
+      ))}
+      <a href="/rss.xml" class="rounded-full border border-line bg-surface px-2.5 py-0.5 text-xs font-medium text-charcoal transition-colors hover:border-line-strong hover:text-ink">
+        RSS
+      </a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,23 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+---
+
+<figure class="not-prose my-6">
+  <img
+    src={src}
+    alt={alt}
+    loading="lazy"
+    class="w-full rounded-2xl border border-line bg-surface object-cover"
+  />
+  {(caption || alt) && (
+    <figcaption class="mt-2.5 text-center text-xs text-muted">
+      {caption ?? alt}
+    </figcaption>
+  )}
+</figure>

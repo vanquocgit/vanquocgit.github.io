@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import JsonLd from '@/components/seo/JsonLd.astro';
+---
+
+<BaseLayout
+  title="Đếm Từ & Tạo Slug SEO Tiếng Việt"
+  description="Công cụ đếm ký tự, từ, thời gian đọc và chuyển tiêu đề tiếng Việt thành slug URL chuẩn SEO."
+>
+  <JsonLd
+    slot="head"
+    type="WebApplication"
+    title="Đếm Từ & Tạo Slug SEO Tiếng Việt"
+    description="Công cụ đếm ký tự, từ, thời gian đọc và chuyển tiêu đề tiếng Việt thành slug URL chuẩn SEO."
+    breadcrumbs={[
+      { name: 'Trang chủ', item: '/' },
+      { name: 'Công cụ & App', item: '/apps' },
+      { name: 'Đếm Từ & Tạo Slug', item: '/tools/word-counter' },
+    ]}
+  />
+
+  <nav aria-label="Breadcrumb" class="mb-6 flex items-center gap-2 text-xs text-muted">
+    <a href="/" class="hover:text-ink">Trang chủ</a>
+    <span aria-hidden="true">/</span>
+    <a href="/apps" class="hover:text-ink">Công cụ & App</a>
+    <span aria-hidden="true">/</span>
+    <span class="text-charcoal">Đếm Từ & Tạo Slug</span>
+  </nav>
+
+  <section class="rounded-3xl border border-line bg-surface p-6 sm:p-8">
+    <h1 class="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+      Đếm Từ & Tạo Slug SEO Tiếng Việt
+    </h1>
+    <p class="mt-2 text-sm text-muted">
+      Xử lý 100% trên trình duyệt, không gửi dữ liệu ra ngoài. Hữu ích khi soạn tiêu đề và nội dung Vlog/Blog.
+    </p>
+
+    <!-- Slug generator -->
+    <div class="mt-6 rounded-2xl border border-line bg-paper p-5">
+      <label for="slug-input" class="block text-xs font-semibold uppercase tracking-wider text-muted">
+        Tiêu đề bài viết
+      </label>
+      <input
+        id="slug-input"
+        type="text"
+        placeholder="Ví dụ: Hướng dẫn xây dựng web cá nhân trên GitHub Pages"
+        class="mt-2 w-full rounded-xl border border-line bg-surface px-4 py-2.5 text-sm text-ink placeholder:text-muted-light focus:border-ink focus:outline-none"
+      />
+      <div class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line bg-subtle/60 px-4 py-2.5">
+        <code id="slug-output" class="font-mono text-xs text-ink sm:text-sm">huong-dan-xay-dung-web-ca-nhan</code>
+        <button type="button" id="copy-slug-btn" class="btn-secondary px-3 py-1 text-xs">
+          Sao chép slug
+        </button>
+      </div>
+    </div>
+
+    <!-- Text stats -->
+    <div class="mt-6">
+      <label for="text-input" class="block text-xs font-semibold uppercase tracking-wider text-muted">
+        Nội dung văn bản
+      </label>
+      <textarea
+        id="text-input"
+        rows="7"
+        placeholder="Dán hoặc gõ đoạn văn bản cần kiểm tra tại đây..."
+        class="mt-2 w-full rounded-2xl border border-line bg-paper p-4 text-sm leading-relaxed text-ink placeholder:text-muted-light focus:border-ink focus:outline-none"
+      ></textarea>
+
+      <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div class="rounded-2xl border border-line bg-paper p-4">
+          <p class="text-xs text-muted">Số từ</p>
+          <p id="stat-words" class="mt-1 text-2xl font-bold text-ink">0</p>
+        </div>
+        <div class="rounded-2xl border border-line bg-paper p-4">
+          <p class="text-xs text-muted">Ký tự (có dấu cách)</p>
+          <p id="stat-chars" class="mt-1 text-2xl font-bold text-ink">0</p>
+        </div>
+        <div class="rounded-2xl border border-line bg-paper p-4">
+          <p class="text-xs text-muted">Số đoạn</p>
+          <p id="stat-paragraphs" class="mt-1 text-2xl font-bold text-ink">0</p>
+        </div>
+        <div class="rounded-2xl border border-line bg-paper p-4">
+          <p class="text-xs text-muted">Thời gian đọc</p>
+          <p id="stat-reading" class="mt-1 text-2xl font-bold text-ink">0 phút</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  function toSlug(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  const slugInput = document.getElementById('slug-input') as HTMLInputElement | null;
+  const slugOutput = document.getElementById('slug-output');
+  const copySlugBtn = document.getElementById('copy-slug-btn');
+
+  slugInput?.addEventListener('input', () => {
+    if (!slugOutput) return;
+    const val = slugInput.value.trim();
+    slugOutput.textContent = val ? toSlug(val) : 'huong-dan-xay-dung-web-ca-nhan';
+  });
+
+  copySlugBtn?.addEventListener('click', async () => {
+    const slug = slugOutput?.textContent ?? '';
+    await navigator.clipboard.writeText(slug);
+    copySlugBtn.textContent = 'Đã chép ✓';
+    setTimeout(() => {
+      copySlugBtn.textContent = 'Sao chép slug';
+    }, 1600);
+  });
+
+  const textInput = document.getElementById('text-input') as HTMLTextAreaElement | null;
+  const statWords = document.getElementById('stat-words');
+  const statChars = document.getElementById('stat-chars');
+  const statParagraphs = document.getElementById('stat-paragraphs');
+  const statReading = document.getElementById('stat-reading');
+
+  textInput?.addEventListener('input', () => {
+    const raw = textInput.value;
+    const trimmed = raw.trim();
+    const words = trimmed ? trimmed.split(/\s+/).length : 0;
+    const chars = raw.length;
+    const paragraphs = trimmed ? trimmed.split(/\n+/).filter((p) => p.trim().length > 0).length : 0;
+    const minutes = words > 0 ? Math.max(1, Math.ceil(words / 200)) : 0;
+
+    if (statWords) statWords.textContent = String(words);
+    if (statChars) statChars.textContent = String(chars);
+    if (statParagraphs) statParagraphs.textContent = String(paragraphs);
+    if (statReading) statReading.textContent = `${minutes} phút`;
+  });
+</script>

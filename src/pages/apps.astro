@@ -1,0 +1,73 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AppCard from '@/components/AppCard.astro';
+import JsonLd from '@/components/seo/JsonLd.astro';
+import apps from '@/data/apps.json';
+---
+
+<BaseLayout
+  title="Công cụ & Web App"
+  description="Tổng hợp các công cụ tiện ích và web app cá nhân triển khai trên GitHub Pages."
+>
+  <JsonLd
+    slot="head"
+    type="WebApplication"
+    title="Danh mục Công cụ & Web App"
+    description="Tổng hợp các công cụ tiện ích và web app cá nhân triển khai trên GitHub Pages."
+    breadcrumbs={[
+      { name: 'Trang chủ', item: '/' },
+      { name: 'Công cụ & App', item: '/apps' },
+    ]}
+  />
+
+  <header class="mb-8 rounded-3xl border border-line bg-surface p-6 sm:p-8">
+    <h1 class="text-3xl font-bold tracking-tight text-ink">Công cụ & Web App</h1>
+    <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
+      Nơi tập hợp các tiện ích chạy trực tiếp trên trình duyệt — bao gồm công cụ tích hợp trong repo chính và các web app đặt ở repository độc lập dưới cùng một tên miền.
+    </p>
+
+    <div class="mt-5 flex flex-wrap gap-2" id="app-filters">
+      <button type="button" data-filter="all" class="app-filter-btn rounded-full bg-ink px-4 py-1.5 text-xs font-medium text-paper transition-colors">
+        Tất cả ({apps.length})
+      </button>
+      <button type="button" data-filter="internal" class="app-filter-btn rounded-full border border-line bg-paper px-4 py-1.5 text-xs font-medium text-charcoal transition-colors hover:bg-subtle">
+        Tích hợp sẵn
+      </button>
+      <button type="button" data-filter="subpath-repo" class="app-filter-btn rounded-full border border-line bg-paper px-4 py-1.5 text-xs font-medium text-charcoal transition-colors hover:bg-subtle">
+        Repo riêng
+      </button>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 gap-5 md:grid-cols-2" id="apps-grid">
+    {apps.map((app) => (
+      <div class="app-item" data-location={app.locationType}>
+        <AppCard app={app} />
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll('.app-filter-btn');
+  const items = document.querySelectorAll('.app-item');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter') || 'all';
+
+      buttons.forEach((b) => {
+        b.classList.remove('bg-ink', 'text-paper');
+        b.classList.add('border', 'border-line', 'bg-paper', 'text-charcoal');
+      });
+      btn.classList.remove('border', 'border-line', 'bg-paper', 'text-charcoal');
+      btn.classList.add('bg-ink', 'text-paper');
+
+      items.forEach((item) => {
+        const loc = item.getAttribute('data-location');
+        const show = filter === 'all' || loc === filter;
+        item.classList.toggle('hidden', !show);
+      });
+    });
+  });
+</script>

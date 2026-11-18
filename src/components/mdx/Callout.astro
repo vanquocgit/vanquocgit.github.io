@@ -1,0 +1,40 @@
+---
+export interface Props {
+  type?: 'info' | 'tip' | 'warning';
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const labels: Record<NonNullable<Props['type']>, { badge: string; defaultTitle: string; style: string }> = {
+  info: {
+    badge: 'i',
+    defaultTitle: 'Thông tin',
+    style: 'border-line-strong bg-subtle/60',
+  },
+  tip: {
+    badge: '✓',
+    defaultTitle: 'Mẹo nhanh',
+    style: 'border-ink/30 bg-surface',
+  },
+  warning: {
+    badge: '!',
+    defaultTitle: 'Lưu ý quan trọng',
+    style: 'border-ink bg-subtle',
+  },
+};
+
+const current = labels[type];
+---
+
+<aside class={`not-prose my-6 rounded-2xl border p-5 ${current.style}`}>
+  <div class="mb-2 flex items-center gap-2.5 text-sm font-semibold text-ink">
+    <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-ink text-xs font-bold text-paper">
+      {current.badge}
+    </span>
+    <span>{title ?? current.defaultTitle}</span>
+  </div>
+  <div class="text-sm leading-relaxed text-charcoal [&>p]:m-0">
+    <slot />
+  </div>
+</aside>

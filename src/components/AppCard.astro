@@ -1,0 +1,73 @@
+---
+export interface AppItem {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  repoUrl?: string;
+  locationType: 'internal' | 'subpath-repo' | 'external' | string;
+  status?: string;
+  tags: string[];
+  featured?: boolean;
+}
+
+export interface Props {
+  app: AppItem;
+}
+
+const { app } = Astro.props;
+
+const locationLabel =
+  app.locationType === 'internal'
+    ? 'Tích hợp sẵn'
+    : app.locationType === 'subpath-repo'
+      ? 'Repo riêng'
+      : 'Web App';
+---
+
+<article class="card-flat flex flex-col justify-between p-5 hover:border-line-strong sm:p-6">
+  <div>
+    <div class="mb-3 flex items-center justify-between gap-2">
+      <span class="pill-tag text-[11px]">{locationLabel}</span>
+      {app.status && (
+        <span class="rounded-full border border-line bg-paper px-2.5 py-0.5 text-[11px] font-medium text-muted">
+          {app.status}
+        </span>
+      )}
+    </div>
+
+    <h3 class="text-lg font-semibold leading-snug text-ink">
+      {app.name}
+    </h3>
+
+    <p class="mt-2 text-sm leading-relaxed text-muted">
+      {app.description}
+    </p>
+
+    {app.tags.length > 0 && (
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        {app.tags.map((tag) => (
+          <span class="rounded-full bg-subtle px-2.5 py-0.5 text-[11px] font-medium text-charcoal">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <div class="mt-5 flex flex-wrap items-center gap-2.5 border-t border-line pt-4">
+    <a href={app.url} class="btn-primary px-4 py-2 text-xs">
+      Mở công cụ →
+    </a>
+    {app.repoUrl && (
+      <a
+        href={app.repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-secondary px-4 py-2 text-xs"
+      >
+        Mã nguồn
+      </a>
+    )}
+  </div>
+</article>

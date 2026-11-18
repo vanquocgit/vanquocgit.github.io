@@ -1,0 +1,65 @@
+name: "Tên Của Bạn"
+role: "Software Engineer & Web Builder"
+location: "Việt Nam"
+email: "ban@example.com"
+website: "https://username.github.io"
+github: "https://github.com/username"
+linkedin: "https://linkedin.com/in/username"
+summary: >
+  Kỹ sư phần mềm yêu thích xây dựng sản phẩm web tinh gọn, chú trọng trải nghiệm người dùng,
+  tốc độ tải trang và kiến trúc mã nguồn dễ bảo trì. Thường xuyên ghi chép, chia sẻ kiến thức
+  qua bài viết kỹ thuật, vlog và phát triển các công cụ tiện ích mã nguồn mở.
+
+skills:
+  - group: "Ngôn ngữ & Nền tảng"
+    items:
+      - "TypeScript / JavaScript"
+      - "HTML5 / CSS3"
+      - "Python"
+      - "SQL"
+  - group: "Framework & Giao diện"
+    items:
+      - "Astro"
+      - "React / Next.js"
+      - "Tailwind CSS"
+      - "Node.js"
+  - group: "Công cụ & Triển khai"
+    items:
+      - "Git & GitHub Actions"
+      - "Docker"
+      - "GitHub Pages / Cloudflare"
+      - "Technical SEO"
+
+experience:
+  - company: "Công ty / Tổ chức Mẫu"
+    role: "Full-stack / Frontend Engineer"
+    period: "2024 — Hiện tại"
+    location: "TP. Hồ Chí Minh / Remote"
+    highlights:
+      - "Thiết kế và tối ưu kiến trúc giao diện web giúp cải thiện điểm Core Web Vitals lên 95+."
+      - "Xây dựng quy trình tự động hóa kiểm thử và triển khai CI/CD trên GitHub Actions."
+      - "Viết tài liệu kỹ thuật và chia sẻ kiến thức nội bộ cho các thành viên mới."
+  - company: "Dự án Tự do & Cá nhân"
+    role: "Web Developer"
+    period: "2022 — 2024"
+    location: "Việt Nam"
+    highlights:
+      - "Phát triển nhiều công cụ web tĩnh (client-side tools) phục vụ xử lý văn bản và dữ liệu."
+      - "Tối ưu hóa SEO kỹ thuật (Sitemap, JSON-LD, Semantic HTML) cho các trang nội dung."
+
+projects:
+  - name: "Website Cá nhân & Hệ thống Vlog"
+    url: "/"
+    description: "Xây dựng bằng Astro + Tailwind CSS + MDX, triển khai đa repo trên GitHub Pages, tối ưu SEO và tốc độ."
+  - name: "Bộ đếm từ & Tạo Slug Tiếng Việt"
+    url: "/tools/word-counter"
+    description: "Công cụ chạy trực tiếp trên trình duyệt giúp đếm từ, ước tính thời gian đọc và tạo slug chuẩn SEO."
+
+education:
+  - school: "Trường Đại học Mẫu"
+    degree: "Cử nhân Công nghệ Thông tin / Kỹ thuật Phần mềm"
+    period: "2018 — 2022"
+
+languages:
+  - "Tiếng Việt (Bản ngữ)"
+  - "Tiếng Anh (Đọc hiểu tài liệu kỹ thuật, giao tiếp công việc)"

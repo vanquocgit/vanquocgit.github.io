@@ -1,0 +1,28 @@
+{
+  "Callout Box": {
+    "scope": "mdx,markdown",
+    "prefix": "vlog-callout",
+    "body": [
+      "<Callout type=\"${1|tip,info,warning|}\" title=\"${2:Lưu ý}\">",
+      "  ${3:Nội dung ghi chú...}",
+      "</Callout>"
+    ],
+    "description": "Chèn hộp ghi chú Callout trong bài viết MDX"
+  },
+  "Image Caption": {
+    "scope": "mdx,markdown",
+    "prefix": "vlog-img",
+    "body": [
+      "<ImageCaption src=\"./${1:image.png}\" alt=\"${2:Mô tả ảnh}\" caption=\"${3:Chú thích hiển thị dưới ảnh}\" />"
+    ],
+    "description": "Chèn ảnh kèm chú thích"
+  },
+  "YouTube Embed": {
+    "scope": "mdx,markdown",
+    "prefix": "vlog-yt",
+    "body": [
+      "<YouTubeEmbed id=\"${1:youtube_video_id}\" title=\"${2:Tiêu đề video}\" />"
+    ],
+    "description": "Nhúng video YouTube tối ưu tốc độ"
+  }
+}
