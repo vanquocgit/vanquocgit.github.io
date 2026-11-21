@@ -15,3 +15,7 @@ npm-debug.log*
 # macOS / Windows OS files
 .DS_Store
 Thumbs.db
+
+#manual pages
+manual/
+

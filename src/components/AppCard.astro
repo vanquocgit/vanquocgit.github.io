@@ -25,29 +25,59 @@ const locationLabel =
       : 'Web App';
 ---
 
-<article class="card-flat flex flex-col justify-between p-5 hover:border-line-strong sm:p-6">
+<article class="group relative flex flex-col justify-between rounded-2xl bg-[#EAE7DF] p-5 transition-colors hover:bg-[#E4E0D6] sm:p-6">
+  {app.status && (
+    <div class="absolute -right-px -top-px z-10 rounded-full border-b-[6px] border-l-[6px] border-[color:var(--bg-paper)] bg-[color:var(--bg-paper)]">
+      <svg
+        class="pointer-events-none absolute -left-[15px] -top-[1px] z-0 h-[16px] w-[26px] overflow-visible"
+        viewBox="0 0 26 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M 0.51 0 L 0.51 2 A 10 10 0 0 1 10.30 14.00 L 25.00 0 Z"
+          class="fill-[var(--bg-paper)]"
+        />
+      </svg>
+      
+      <svg
+        class="pointer-events-none absolute -right-[1px] top-[18px] z-0 h-[26px] w-[16px] overflow-visible"
+        viewBox="0 0 16 26"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M 16 24.49 L 14 24.49 A 10 10 0 0 0 2 14.70 L 16 0 Z"
+          class="fill-[var(--bg-paper)]"
+        />
+      </svg>
+
+      <span class="relative z-10 inline-flex h-6 items-center gap-1.5 rounded-full bg-ink px-3 text-[11px] font-medium text-paper">
+        <span class="h-1.5 w-1.5 rounded-full bg-paper/80" aria-hidden="true"></span>
+        <span>{app.status}</span>
+      </span>
+    </div>
+  )}
+
   <div>
-    <div class="mb-3 flex items-center justify-between gap-2">
-      <span class="pill-tag text-[11px]">{locationLabel}</span>
-      {app.status && (
-        <span class="rounded-full border border-line bg-paper px-2.5 py-0.5 text-[11px] font-medium text-muted">
-          {app.status}
-        </span>
-      )}
+    <div class:list={['mb-3 flex items-center gap-2', app.status ? 'pr-32' : '']}>
+      <span class="inline-flex items-center rounded-full bg-paper/90 px-3 py-1 text-[11px] font-medium text-charcoal">
+        {locationLabel}
+      </span>
     </div>
 
     <h3 class="text-lg font-semibold leading-snug text-ink">
       {app.name}
     </h3>
 
-    <p class="mt-2 text-sm leading-relaxed text-muted">
+    <p class="mt-2 text-sm leading-relaxed text-charcoal/85">
       {app.description}
     </p>
 
     {app.tags.length > 0 && (
       <div class="mt-4 flex flex-wrap gap-1.5">
         {app.tags.map((tag) => (
-          <span class="rounded-full bg-subtle px-2.5 py-0.5 text-[11px] font-medium text-charcoal">
+          <span class="rounded-full bg-paper/85 px-2.5 py-0.5 text-[11px] font-medium text-charcoal">
             {tag}
           </span>
         ))}
@@ -55,7 +85,7 @@ const locationLabel =
     )}
   </div>
 
-  <div class="mt-5 flex flex-wrap items-center gap-2.5 border-t border-line pt-4">
+  <div class="mt-5 flex flex-wrap items-center gap-2.5 border-t border-ink/10 pt-4">
     <a href={app.url} class="btn-primary px-4 py-2 text-xs">
       Mở công cụ →
     </a>
@@ -64,7 +94,7 @@ const locationLabel =
         href={app.repoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="btn-secondary px-4 py-2 text-xs"
+        class="btn-secondary border-transparent bg-paper px-4 py-2 text-xs hover:border-transparent hover:bg-surface"
       >
         Mã nguồn
       </a>

@@ -11,9 +11,9 @@ export interface SocialLink {
 
 export const profile = {
   siteTitle: 'Góc Cá Nhân — Vlog, CV & Công cụ Web',
-  author: 'Tên Của Bạn',
-  initials: 'TB',
-  role: 'Software Engineer & Builder',
+  author: 'Đỗ Văn Quốc',
+  initials: 'ĐVQ',
+  role: 'GIS Engineer & UX/UI Designer',
   location: 'Việt Nam',
   bio: 'Ghi chép lại những kiến thức đã học qua vlog, bài viết kỹ thuật và xây dựng các công cụ nhỏ hữu ích chạy trực tiếp trên trình duyệt.',
   email: 'ban@example.com',
