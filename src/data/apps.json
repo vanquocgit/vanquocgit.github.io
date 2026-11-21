@@ -4,7 +4,7 @@
     "name": "Đếm Từ & Tạo Slug SEO Tiếng Việt",
     "description": "Công cụ nhỏ chạy ngay trên trình duyệt để đếm ký tự, từ, ước tính thời gian đọc và chuyển tiêu đề tiếng Việt có dấu thành slug URL chuẩn SEO.",
     "url": "/tools/word-counter",
-    "repoUrl": "https://github.com/username/website-gitpages",
+    "repoUrl": "https://github.com/vanquocgit/vanquocgit.github.io",
     "locationType": "internal",
     "status": "Live",
     "tags": ["Astro", "Vanilla JS", "SEO"],

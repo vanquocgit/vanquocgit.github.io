@@ -23,7 +23,7 @@ const {
   breadcrumbs,
 } = Astro.props;
 
-const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://username.github.io';
+const siteOrigin = Astro.site?.toString().replace(/\/$/, '') ?? 'https://vanquocgit.github.io';
 const currentUrl = new URL(Astro.url.pathname, siteOrigin).toString();
 
 const schemas: Record<string, unknown>[] = [];

@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Cập nhật domain khi chuyển sang tên miền riêng
-Sitemap: https://username.github.io/sitemap-index.xml
+Sitemap: https://vanquocgit.github.io/sitemap-index.xml

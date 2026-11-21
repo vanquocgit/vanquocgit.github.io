@@ -24,7 +24,7 @@ export const profile = {
     { label: 'CV', shortLabel: 'CV', href: '/cv' },
   ] satisfies NavItem[],
   socials: [
-    { label: 'GitHub', href: 'https://github.com/username' },
+    { label: 'GitHub', href: 'https://github.com/vanquocgit' },
     { label: 'YouTube', href: 'https://youtube.com/@username' },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/username' },
     { label: 'Email', href: 'mailto:ban@example.com' },
